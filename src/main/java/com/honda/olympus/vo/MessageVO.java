@@ -1,33 +1,18 @@
 package com.honda.olympus.vo;
 
-public class MessageVO {
+import java.util.List;
 
-	private String source;
+public class MessageVO {
 
 	private Long status;
 
 	private String msg;
 
-	private String file;
+	private List<Long> details;
 
 	public MessageVO() {
 		super();
-	}
-
-	public MessageVO(String source, Long status, String msg, String file) {
-		super();
-		this.source = source;
-		this.status = status;
-		this.msg = msg;
-		this.file = file;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
+		// TODO Auto-generated constructor stub
 	}
 
 	public Long getStatus() {
@@ -46,14 +31,17 @@ public class MessageVO {
 		this.msg = msg;
 	}
 
-	public String getFile() {
-		return file;
+	public List<Long> getDetails() {
+		return details;
 	}
 
-	public void setFile(String file) {
-		this.file = file;
+	public void setDetails(List<Long> details) {
+		this.details = details;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "MessageVO [status=" + status + ", msg=" + msg + ", details=" + details + "]";
+	}
 
 }
