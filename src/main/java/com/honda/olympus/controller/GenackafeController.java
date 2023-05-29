@@ -2,7 +2,6 @@ package com.honda.olympus.controller;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

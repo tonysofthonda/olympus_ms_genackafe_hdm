@@ -13,7 +13,7 @@ import com.honda.olympus.dao.AfeActionEntity;
 public interface AfeActionRepository extends JpaRepository<AfeActionEntity, Long>{
 
 	// QUERY5
-	@Query("SELECT o FROM AfeActionEntity o WHERE o.action = :action ")
-	public List<AfeActionEntity> findAllByAction(@Param("action") String action);
+	@Query("SELECT o FROM AfeActionEntity o WHERE o.id = :id ")
+	public List<AfeActionEntity> findAllByAction(@Param("id") Long id);
 	
 }

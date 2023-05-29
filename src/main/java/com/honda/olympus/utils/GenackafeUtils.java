@@ -10,8 +10,8 @@ public class GenackafeUtils {
 	}
 
 	public static String getFileName() {
-		return new StringBuilder().append(AckgmConstants.ACK_PREFIX)
-				.append(LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)).append(AckgmConstants.FILE_EXT)
+		return new StringBuilder().append(GenackafeConstants.ACK_PREFIX)
+				.append(LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)).append(GenackafeConstants.FILE_EXT)
 				.toString();
 	}
 

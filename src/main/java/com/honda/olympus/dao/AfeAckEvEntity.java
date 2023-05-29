@@ -10,88 +10,83 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 @Entity
 @Table(name = "afe_ack_ev", schema = "afedb")
 public class AfeAckEvEntity {
-	
 
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		@Column(name = "id")
-		private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-		@Column(name = "fixed_order_id")		
-		private Long fixedOrderId;
+	@Column(name = "fixed_order_id")
+	private Long fixedOrderId;
 
-		@Column(name = "ack_status")		
-		private String ackStatus;
+	@Column(name = "ack_status")
+	private String ackStatus;
 
-		@Column(name = "ack_msg")
-		private String ackMsg;
-		
-		@Temporal(TemporalType.TIMESTAMP)
-		@Column(name = "ack_request_timestamp")
-		Date ackRequestTimestamp;
+	@Column(name = "ack_msg")
+	private String ackMsg;
 
-		@Temporal(TemporalType.TIMESTAMP)
-		@Column(name = "lastChangeTimestamp")
-		Date updateTimeStamp;
-		
-		
-		
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "ack_request_timestamp")
+	Date ackRequestTimestamp;
 
-		public AfeAckEvEntity() {
-			super();
-		}
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "lastChangeTimestamp")
+	Date lastChangeTimestamp;
 
-		public Long getId() {
-			return id;
-		}
+	public AfeAckEvEntity() {
+		super();
+	}
 
-		public void setId(Long id) {
-			this.id = id;
-		}
+	public Long getId() {
+		return id;
+	}
 
-		public Long getFixedOrderId() {
-			return fixedOrderId;
-		}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-		public void setFixedOrderId(Long fixedOrderId) {
-			this.fixedOrderId = fixedOrderId;
-		}
+	public Long getFixedOrderId() {
+		return fixedOrderId;
+	}
 
-		public String getAckStatus() {
-			return ackStatus;
-		}
+	public void setFixedOrderId(Long fixedOrderId) {
+		this.fixedOrderId = fixedOrderId;
+	}
 
-		public void setAckStatus(String ackStatus) {
-			this.ackStatus = ackStatus;
-		}
+	public String getAckStatus() {
+		return ackStatus;
+	}
 
-		public String getAckMsg() {
-			return ackMsg;
-		}
+	public void setAckStatus(String ackStatus) {
+		this.ackStatus = ackStatus;
+	}
 
-		public void setAckMsg(String ackMsg) {
-			this.ackMsg = ackMsg;
-		}
+	public String getAckMsg() {
+		return ackMsg;
+	}
 
-		public Date getAckRequestTimestamp() {
-			return ackRequestTimestamp;
-		}
+	public void setAckMsg(String ackMsg) {
+		this.ackMsg = ackMsg;
+	}
 
-		public void setAckRequestTimestamp(Date ackRequestTimestamp) {
-			this.ackRequestTimestamp = ackRequestTimestamp;
-		}
+	public Date getAckRequestTimestamp() {
+		return ackRequestTimestamp;
+	}
 
-		public Date getUpdateTimeStamp() {
-			return updateTimeStamp;
-		}
+	public void setAckRequestTimestamp(Date ackRequestTimestamp) {
+		this.ackRequestTimestamp = ackRequestTimestamp;
+	}
 
-		public void setUpdateTimeStamp(Date updateTimeStamp) {
-			this.updateTimeStamp = updateTimeStamp;
-		}
-		
-		
+	public Date getLastChangeTimestamp() {
+		return lastChangeTimestamp;
+	}
+
+	public void setLastChangeTimestamp(Date lastChangeTimestamp) {
+		this.lastChangeTimestamp = lastChangeTimestamp;
+	}
 
 }
