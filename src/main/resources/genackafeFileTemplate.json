@@ -1,0 +1,130 @@
+{
+  "template": [
+    {
+      "field": "XPROD-DIV-CD",
+      "Spaces": 1,
+      "Position_start": 1,
+      "Position_end": 1,
+      "Description": "XPROD-DIV-CD"
+    },
+    {
+      "field": "PLANT-ID",
+      "Spaces": 1,
+      "Position_start": 2,
+      "Position_end": 2,
+      "Description": "PLANT-ID"
+    },
+    {
+      "field": "GM-PROD-WEEK-START-DAY",
+      "Spaces": 10,
+      "Position_start": 3,
+      "Position_end": 12,
+      "Description": "GM-PROD-WEEK-START-DAY"
+    },
+    {
+      "field": "GM-ORD-DUE-DT",
+      "Spaces": 10,
+      "Position_start": 13,
+      "Position_end": 22,
+      "Description": "GM-ORD-DUE-DT"
+    },
+    {
+      "field": "MDL-ID",
+      "Spaces": 10,
+      "Position_start": 23,
+      "Position_end": 32,
+      "Description": "MDL-ID"
+    },
+    {
+      "field": "MDL-TYP-CD",
+      "Spaces": 4,
+      "Position_start": 33,
+      "Position_end": 36,
+      "Description": "MDL-TYP-CD"
+    },
+    {
+      "field": "MDL-OPT-PKG-CD",
+      "Spaces": 3,
+      "Position_start": 37,
+      "Position_end": 39,
+      "Description": "MDL-OPT-PKG-CD"
+    },
+    {
+      "field": "MDL-MFG-COLOR-ID",
+      "Spaces": 11,
+      "Position_start": 40,
+      "Position_end": 50,
+      "Description": "MDL-MFG-COLOR-ID"
+    },
+    {
+      "field": "EXTR-COLOR-CD",
+      "Spaces": 2,
+      "Position_start": 51,
+      "Position_end": 52,
+      "Description": "EXTR-COLOR-CD"
+    },
+    {
+      "field": "INT-COLOR-CD",
+      "Spaces": 2,
+      "Position_start": 53,
+      "Position_end": 54,
+      "Description": "INT-COLOR-CD"
+    },
+    {
+      "field": "GM-ORD-ACK-ACTION",
+      "Spaces": 6,
+      "Position_start": 55,
+      "Position_end": 60,
+      "Description": "GM-ORD-ACK-ACTION"
+    },
+    {
+      "field": "GM-ORD-ACK-VEH-ORD-NO",
+      "Spaces": 6,
+      "Position_start": 61,
+      "Position_end": 66,
+      "Description": "GM-ORD-ACK-VEH-ORD-NO"
+    },
+    {
+      "field": "GM-ORD-ACK-EXTERN-CONFIG-ID",
+      "Spaces": 32,
+      "Position_start": 67,
+      "Position_end": 98,
+      "Description": "GM-ORD-ACK-EXTERN-CONFIG-ID"
+    },
+    {
+      "field": "GM-ORD-ACK-REQST-STATUS",
+      "Spaces": 8,
+      "Position_start": 99,
+      "Position_end": 106,
+      "Description": "GM-ORD-ACK-REQST-STATUS"
+    },
+    {
+      "field": "GM-ORD-ACK-MSG",
+      "Spaces": 80,
+      "Position_start": 107,
+      "Position_end": 186,
+      "Description": "GM-ORD-ACK-MSG"
+    },
+    {
+      "field": "GM-ORD-ACK-VO-LAST-CHG-TMSTP",
+      "Spaces": 11,
+      "Position_start": 187,
+      "Position_end": 197,
+      "Description": "GM-ORD-ACK-VO-LAST-CHG-TMSTP"
+    },
+    {
+      "field": "GM-ORD-ACK-REQST-ID",
+      "Spaces": 40,
+      "Position_start": 198,
+      "Position_end": 237,
+      "Description": "GM-ORD-ACK-REQST-ID"
+    },
+    {
+      "field": "FILLER",
+      "Spaces": 63,
+      "Position_start": 238,
+      "Position_end": 300,
+      "Description": "FILLER"
+    }
+  ]
+}
