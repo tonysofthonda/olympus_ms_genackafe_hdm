@@ -27,7 +27,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		List<String> details = new ArrayList<>();
 
 		details.add(ex.getLocalizedMessage());
-		ResponseVO error = new ResponseVO("server error", details);
+		ResponseVO error = new ResponseVO(2,"Unknown", "");
 
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -48,13 +48,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(responseBody, headers, status);
 	}
 	
-	@ExceptionHandler(MonitorException.class)
+	@ExceptionHandler(GenackafeException.class)
 	public final ResponseEntity<Object> handleMonitorException(Exception ex, WebRequest request){
 		
 		List<String> details = new ArrayList<>();
 		
 		details.add(ex.getLocalizedMessage());
-		ResponseVO error = new ResponseVO("server error", details);
+		ResponseVO error = new ResponseVO(0,ex.getLocalizedMessage(), "");
 		
 		return new ResponseEntity<>(error,HttpStatus.INTERNAL_SERVER_ERROR);
 	}

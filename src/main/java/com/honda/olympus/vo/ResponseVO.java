@@ -1,37 +1,45 @@
 package com.honda.olympus.vo;
 
-import java.util.List;
-
 public class ResponseVO {
 
+	private Integer status;
 	private String message;
-	private List<String> details;
+
+	private String file;
 	
-	
-
-	public ResponseVO() {
-	}
-
-	public ResponseVO(String message, List<String> details) {
-		super();
-		this.message = message;
-		this.details = details;
-	}
-
 	public String getMessage() {
 		return message;
 	}
+	
+	
+
+	public ResponseVO(Integer status, String message, String file) {
+		super();
+		this.status = status;
+		this.message = message;
+		this.file = file;
+	}
+
+
 
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
-	public List<String> getDetails() {
-		return details;
+	public Integer getStatus() {
+		return status;
 	}
-
-	public void setDetails(List<String> details) {
-		this.details = details;
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
+	public String getFile() {
+		return file;
+	}
+	public void setFile(String file) {
+		this.file = file;
+	}
+	
+	
+
+	
 
 }

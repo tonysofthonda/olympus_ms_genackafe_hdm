@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.honda.olympus.dao.AfeAckEvEntity;
 import com.honda.olympus.dao.AfeActionEntity;
@@ -17,6 +18,7 @@ import com.honda.olympus.dao.AfeFixedOrdersEvEntity;
 import com.honda.olympus.dao.AfeModelColorEntity;
 import com.honda.olympus.dao.AfeModelEntity;
 import com.honda.olympus.dao.AfeModelTypeEntity;
+import com.honda.olympus.exception.GenackafeException;
 import com.honda.olympus.repository.AfeAckEvRepository;
 import com.honda.olympus.repository.AfeActionRepository;
 import com.honda.olympus.repository.AfeColorRepository;
@@ -29,6 +31,7 @@ import com.honda.olympus.utils.GenackafeUtils;
 import com.honda.olympus.vo.EventVO;
 import com.honda.olympus.vo.MessageVO;
 
+@Service
 public class GenackafeService {
 
 	@Autowired
@@ -61,12 +64,10 @@ public class GenackafeService {
 	@Value("${folder.source}")
 	private String folderSource;
 
-	public void createFile(MessageVO message) {
+	public Boolean createFile(MessageVO message) {
 
 		final DateTimeFormatter CURRENT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		Boolean success = Boolean.FALSE;
-
-		Calendar currentTieme = new GregorianCalendar();
 
 		if (message.getStatus() != GenackafeConstants.ONE_STATUS) {
 
@@ -122,6 +123,8 @@ public class GenackafeService {
 				// return to main line process loop
 				break;
 			}
+			
+			AfeModelColorEntity modelColorQ2 = modelColors.get(0);
 
 			// QUERY3
 			List<AfeModelEntity> models = afeModelRepository.findAllById(modelColors.get(0).getModel_id());
@@ -150,13 +153,13 @@ public class GenackafeService {
 				logEventService.sendLogEvent(event);
 
 				// return to main line process loop
-				return;
+				break;
 			}
 			
 			AfeModelTypeEntity modelTypeQ4 = modelTypes.get(0);
 
 			// QUERY5
-			List<AfeColorEntity> colors = afeColorRepository.findAllById(modelColors.get(0).getColorId());
+			List<AfeColorEntity> colors = afeColorRepository.findAllById(modelColorQ2.getColorId());
 
 			if (colors.isEmpty()) {
 				System.out.println(
@@ -167,13 +170,13 @@ public class GenackafeService {
 				logEventService.sendLogEvent(event);
 
 				// return to main line process loop
-				return;
+				break;
 			}
 			
-			AfeColorEntity color = colors.get(0);
+			AfeColorEntity colorQ5 = colors.get(0);
 
 			// QUERY6
-			List<AfeActionEntity> actions = afeActionRepository.findAllByAction(fixedOrders.get(0).getActionId());
+			List<AfeActionEntity> actions = afeActionRepository.findAllByAction(fixedOrderQ1.getActionId());
 
 			if (actions.isEmpty()) {
 				System.out.println(
@@ -184,7 +187,7 @@ public class GenackafeService {
 				logEventService.sendLogEvent(event);
 
 				// return to main line process loop
-				return;
+				break;
 			}
 			
 			AfeActionEntity actionQ6 = actions.get(0);
@@ -198,7 +201,7 @@ public class GenackafeService {
 				event = new EventVO(serviceName, GenackafeConstants.ZERO_STATUS,
 						"No existe el fixed_order_id: " + fixedOrderId + " en la tabla AFE_ACK_EV", "");
 				logEventService.sendLogEvent(event);
-				return;
+				break;
 			}
 			
 			AfeAckEvEntity ackQ7 = acks.get(0);
@@ -209,9 +212,9 @@ public class GenackafeService {
 			fileLine.append(LocalDate.now().format(CURRENT_DATE_FORMATTER));
 			fileLine.append(modelQ3.getCode());
 			fileLine.append(modelTypeQ4.getModelType());
-			fileLine.append(color.getCode());
-			fileLine.append(color.getExteriorCode());
-			fileLine.append(color.getInteriorCode());
+			fileLine.append(colorQ5.getCode());
+			fileLine.append(colorQ5.getExteriorCode());
+			fileLine.append(colorQ5.getInteriorCode());
 			fileLine.append(actionQ6.getAction());
 			fileLine.append(fixedOrderQ1.getOrderNumber());
 			fileLine.append(ackQ7.getAckStatus());
@@ -219,8 +222,24 @@ public class GenackafeService {
 			fileLine.append(ackQ7.getLastChangeTimestamp());
 			fileLine.append(fixedOrderQ1.getRequestId());
 			
+			System.out.println("Length: "+fileLine.length());
+			System.out.println(fileLine.toString());
+			try {
+				GenackafeUtils.checkFileIfWriteFile(folderSource,fileName,fileLine.toString());
+			} catch (GenackafeException e) {
+				System.out.println("El archivo "+fileName+" NO fue creado correctamente en la ubicación: "+folderSource);
+				event = new EventVO(serviceName, GenackafeConstants.ZERO_STATUS,
+						"El archivo "+fileName+" NO fue creado correctamente en la ubicación: "+folderSource, "");
+				logEventService.sendLogEvent(event);
+				break;
+			}
+			
+			fileLine.setLength(0);
+			success = Boolean.TRUE;
 
 		}
+		
+		return success;
 
 	}
 
