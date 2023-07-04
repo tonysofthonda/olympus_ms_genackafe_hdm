@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import com.honda.olympus.vo.EventVO;
 
 import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @Service
 public class LogEventService {
@@ -20,8 +19,8 @@ public class LogEventService {
 
 	public void sendLogEvent(EventVO message) {
 		try {
-			log.debug("Ackgm_hdm:: Calling logEvent service");
-			log.debug(message.toString());
+			log.debug("Genackafe:: Calling logEvent service");
+			log.debug("Genackafe:: {}",message.toString());
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			RestTemplate restTemplate = new RestTemplate();
@@ -31,10 +30,10 @@ public class LogEventService {
 			ResponseEntity<String> responseEntity = restTemplate.postForEntity(notificationURI, requestEntity,
 					String.class);
 
-			log.debug("Ackgm_hdm:: LogEvent created with Status Code: {}",responseEntity.getStatusCode());
-			log.debug("Message: " + responseEntity.getBody());
+			log.debug("Genackafe:: LogEvent created with Status Code: {}",responseEntity.getStatusCode());
+			log.debug("Genackafe:: Message: {}",responseEntity.getBody());
 		} catch (Exception e) {
-			log.info("Ackgm_hdm:: Error calling logEvent service {}",e.getLocalizedMessage());
+			log.info("Error calling logEvent service due to: {}",e.getLocalizedMessage());
 		}
 
 	}

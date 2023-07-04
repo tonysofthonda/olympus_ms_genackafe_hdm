@@ -1,6 +1,5 @@
 package com.honda.olympus.controller;
 
-
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import com.honda.olympus.exception.FileProcessException;
 import com.honda.olympus.exception.GenackafeException;
 import com.honda.olympus.service.GenackafeService;
 import com.honda.olympus.vo.GenAckResponseVO;
-import com.honda.olympus.vo.MessageVO;
+import com.honda.olympus.vo.MessageEventVO;
 import com.honda.olympus.vo.ResponseVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,22 +35,30 @@ public class GenackafeController {
 	@Value("${service.profile}")
 	private String profile;
 
+	@Value("${service.name}")
+	private String serviceName;
+
 	@Autowired
 	private GenackafeService genackafeService;
 
 	@PostMapping(path = "/event", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResponseVO> generateAckowledment(@RequestBody MessageVO message)
+	public ResponseEntity<ResponseVO> generateAckowledment(@RequestBody MessageEventVO message)
 			throws GenackafeException, FileProcessException, IOException {
 		log.info(message.toString());
-		
-		
+
 		GenAckResponseVO response = genackafeService.createFile(message);
+
 		if (response.getSuccess()) {
-			return new ResponseEntity<>(new ResponseVO(1, responseMessage, response.getFileName()), HttpStatus.OK);
+			return new ResponseEntity<>(
+					new ResponseVO(serviceName, 1L, responseMessage, response.getFileName()),
+					HttpStatus.OK);
 		}
 
-		return new ResponseEntity<>(new ResponseVO(0, "No puede insertar lineas al archivo: "+response.getFileName(), response.getFileName()), HttpStatus.BAD_REQUEST);
-		
+		return new ResponseEntity<>(
+				new ResponseVO(serviceName, 0L,
+						"No puede insertar lineas al archivo: " + response.getFileName(), response.getFileName()),
+				HttpStatus.BAD_REQUEST);
+
 	}
 
 }

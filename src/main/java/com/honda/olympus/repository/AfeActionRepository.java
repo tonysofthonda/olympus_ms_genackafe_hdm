@@ -7,13 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.honda.olympus.dao.AfeActionEntity;
+import com.honda.olympus.dao.AfeActionEvEntity;
 
 @Repository
-public interface AfeActionRepository extends JpaRepository<AfeActionEntity, Long>{
+public interface AfeActionRepository extends JpaRepository<AfeActionEvEntity, Long>{
 
-	// QUERY
-	@Query("SELECT o FROM AfeActionEntity o WHERE o.action = :action ")
-	public List<AfeActionEntity> findAllByAction(@Param("action") String action);
+	// QUERY5
+	@Query("SELECT o FROM AfeActionEvEntity o WHERE o.id = :id ")
+	public List<AfeActionEvEntity> findAllByAction(@Param("id") Long id);
 	
 }

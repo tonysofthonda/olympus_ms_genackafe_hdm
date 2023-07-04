@@ -1,26 +1,25 @@
 package com.honda.olympus.vo;
 
-public class MessageVO {
-
+public class ResponseExceptionVO {
 	private String source;
-
 	private Long status;
-
-	private String msg;
-
+	private String message;
 	private String file;
 
-	public MessageVO() {
-		super();
+	public ResponseExceptionVO() {
 	}
+	
+	
 
-	public MessageVO(String source, Long status, String msg, String file) {
+	public ResponseExceptionVO(String source, Long status, String message, String file) {
 		super();
 		this.source = source;
 		this.status = status;
-		this.msg = msg;
+		this.message = message;
 		this.file = file;
 	}
+
+
 
 	public String getSource() {
 		return source;
@@ -38,12 +37,12 @@ public class MessageVO {
 		this.status = status;
 	}
 
-	public String getMsg() {
-		return msg;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public String getFile() {

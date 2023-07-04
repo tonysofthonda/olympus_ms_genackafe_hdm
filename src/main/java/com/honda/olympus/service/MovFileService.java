@@ -21,8 +21,8 @@ public class MovFileService {
 
 	public void sendMoveFileMessage(MoveFileVO message) {
 		try {
-			log.info("Calling MoveFile service");
-			log.info(message.toString());
+			log.debug("Genackafe:: Calling MoveFile service");
+			log.debug("Genackafe:: {}",message.toString());
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -33,10 +33,10 @@ public class MovFileService {
 			ResponseEntity<String> responseEntity = restTemplate.postForEntity(moveFileURI, requestEntity,
 					String.class);
 
-			log.info("MoveFile called with Status Code: {}",responseEntity.getStatusCode());
-			log.info("Message: " + responseEntity.getBody());
+			log.debug("Genackafe:: MoveFile called with Status Code: {}",responseEntity.getStatusCode());
+			log.debug("Genackafe:: Message: {}",responseEntity.getBody());
 		} catch (Exception e) {
-			log.info("Error calling MoveFIle service {}",e.getLocalizedMessage());
+			log.info("Genackafe:: Error calling MoveFIle service {}",e.getLocalizedMessage());
 		}
 
 	}
