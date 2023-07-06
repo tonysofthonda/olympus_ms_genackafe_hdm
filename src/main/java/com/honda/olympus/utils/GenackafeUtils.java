@@ -40,14 +40,9 @@ public class GenackafeUtils {
 
 	public static String getFileName() {
 
-		LocalDateTime now = LocalDateTime.now();
-		int hour = now.getHour();
-		int minute = now.getMinute();
-		int second = now.getSecond();
-
 		return new StringBuilder().append(GenackafeConstants.ACK_PREFIX)
-				.append(LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)).append(hour).append(minute)
-				.append(second).append(GenackafeConstants.FILE_EXT).toString();
+				.append(LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE))
+				.append(GenackafeConstants.FILE_EXT).toString();
 	}
 
 	public static void checkFileIfWriteFile(String route, String fileName, String newLine) throws GenackafeException {
@@ -61,7 +56,7 @@ public class GenackafeUtils {
 			if (!Files.exists(path)) {
 
 				Files.createFile(path);
-				System.out.println("File created");
+				log.debug("Genstaafe:: File created");
 
 			}
 
@@ -69,7 +64,7 @@ public class GenackafeUtils {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println(e.getLocalizedMessage());
+			log.debug("Genstaafe:: Exception ocurred due to: {}",e.getLocalizedMessage());
 			throw new GenackafeException("Error creating/writing file");
 		}
 	}
@@ -80,7 +75,7 @@ public class GenackafeUtils {
 
 			ClassPathResource staticDataResource = new ClassPathResource("genackafeFileTemplate.json");
 			File file = staticDataResource.getFile();
-			log.info("Resource FileName: {}", staticDataResource.getFilename());
+			log.debug("Genstaafe:: Resource FileName: {}", staticDataResource.getFilename());
 
 			InputStream inputStream = new FileInputStream(file);
 			StringBuilder responseStrBuilder = new StringBuilder();
@@ -173,6 +168,10 @@ public class GenackafeUtils {
 	
 	public static String formatDateTimeStamp(Date date) {
 		String pattern = "yyyy-MM-dd";
+		if(date == null) {
+			return "";
+		}
+			
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		return simpleDateFormat.format(date);
 	}

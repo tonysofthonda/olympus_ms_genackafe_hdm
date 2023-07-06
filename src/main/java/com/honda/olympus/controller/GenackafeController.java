@@ -2,11 +2,14 @@ package com.honda.olympus.controller;
 
 import java.io.IOException;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@Validated
 public class GenackafeController {
 	@Value("${service.success.message}")
 	private String responseMessage;
@@ -42,9 +46,9 @@ public class GenackafeController {
 	private GenackafeService genackafeService;
 
 	@PostMapping(path = "/event", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResponseVO> generateAckowledment(@RequestBody MessageEventVO message)
+	public ResponseEntity<ResponseVO> generateAckownledment(@Valid @RequestBody MessageEventVO message)
 			throws GenackafeException, FileProcessException, IOException {
-		log.info(message.toString());
+		log.debug(message.toString());
 
 		GenAckResponseVO response = genackafeService.createFile(message);
 
@@ -56,7 +60,7 @@ public class GenackafeController {
 
 		return new ResponseEntity<>(
 				new ResponseVO(serviceName, 0L,
-						"No puede insertar lineas al archivo: " + response.getFileName(), response.getFileName()),
+						"No se encontraron líneas con suficiente información para ser procesadas", response.getFileName()),
 				HttpStatus.BAD_REQUEST);
 
 	}

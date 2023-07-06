@@ -41,7 +41,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		MessageVO message = new MessageVO(serviceName, GenackafeConstants.ZERO_STATUS,notificationMessage , "");
 		notificationService.generatesNotification(message);
 		
-		ResponseVO error = new ResponseVO(serviceName,0L,"Unknown", "");
+		ResponseVO error = new ResponseVO(serviceName,0L,ex.getLocalizedMessage(), "");
 
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

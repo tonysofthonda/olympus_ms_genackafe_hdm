@@ -1,5 +1,6 @@
 package com.honda.olympus.service;
 
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,7 +8,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -123,12 +123,22 @@ public class GenackafeService {
 
 		final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Boolean success = Boolean.FALSE;
+		
+		
 
 		if (!message.getStatus().equals(GenackafeConstants.ONE_STATUS)) {
 
 			genackMessagesHandler.createAndLogMessageStatusFail(message.getStatus());
 			throw new GenackafeException(
 					"El mensaje tiene un status no aceptado para el proceso " + message.toString());
+
+		}
+		
+		if (message.getDetails() == null) {
+
+			genackMessagesHandler.createAndLogMessageStatusFail(message.getStatus());
+			throw new GenackafeException(
+					"El mensaje no tiene detalles para procesar" + message.toString());
 
 		}
 
@@ -140,8 +150,10 @@ public class GenackafeService {
 		}
 
 		String fileName = GenackafeUtils.getFileName();
+		
+		
 
-		this.output = folderSource + fileName;
+		this.output = folderSource + "/"+ fileName;
 
 		Iterator<Long> it = message.getDetails().iterator();
 		EventVO event;
@@ -171,26 +183,26 @@ public class GenackafeService {
 			}
 
 			AfeFixedOrdersEvEntity fixedOrderQ1 = fixedOrders.get(0);
-			Long idQ1 = fixedOrders.get(0).getId();
-			String requestIdQ1 = fixedOrders.get(0).getRequestId().trim();
-			Long modelColorId = fixedOrders.get(0).getModelColorId();
-			Long actionIdQ1 = fixedOrders.get(0).getActionId();
-			Date weekStrtDatQ1 = fixedOrders.get(0).getProdWeekStartDay();
-			Date ordDueDteQ1 = fixedOrders.get(0).getOrdDueDt();
-			String orderNumberQ1 = fixedOrders.get(0).getOrderNumber().trim();
-
+			Long idQ1 = fixedOrderQ1.getId();
+			String requestIdQ1 = fixedOrderQ1.getRequestId().trim();
+			Long modelColorId = fixedOrderQ1.getModelColorId();
+			Long actionIdQ1 = fixedOrderQ1.getActionId();
+			Date weekStrtDatQ1 = fixedOrderQ1.getProdWeekStartDay();
+			Date ordDueDteQ1 = fixedOrderQ1.getOrdDueDt();
+			String orderNumberQ1 = fixedOrderQ1.getOrderNumber().trim();
+			String exterConfigIdQ1 = fixedOrderQ1.getExternConfigId().trim();
 			// QUERY2
 			List<AfeModelColorEntity> modelColors = afeModelColorRepository.findAllById(modelColorId);
 
 			if (modelColors.isEmpty()) {
 				genackMessagesHandler.createAndLogMessageModelColorNoExists(modelColorId, idQ1,
-						"SELECT * FROM MODEL_COLOR_ID WHERE ID");
+						"SELECT o FROM AfeModelColorEntity o WHERE o.id = :id");
 				continue;
 			}
 
 			AfeModelColorEntity modelColorQ2 = modelColors.get(0);
-			Long modelIdQ2 = modelColors.get(0).getModel_id();
-			Long colorIdQ2 = modelColors.get(0).getColorId();
+			Long modelIdQ2 = modelColorQ2.getModel_id();
+			Long colorIdQ2 = modelColorQ2.getColorId();
 
 			// QUERY3
 			List<AfeModelEntity> models = afeModelRepository.findAllById(modelIdQ2);
@@ -198,7 +210,7 @@ public class GenackafeService {
 			if (models.isEmpty()) {
 
 				genackMessagesHandler.createAndLogMessageModelNoExist(modelIdQ2,
-						"SELECT * FROM MODEL_COLOR WHERE  WHERE ID");
+						"SELECT o FROM AfeModelEntity o WHERE o.id = :id ");
 
 				continue;
 			}
@@ -207,14 +219,14 @@ public class GenackafeService {
 			Long divisionIdQ3 = modelQ3.getDivisionId();
 			Long plantIdQ3 = modelQ3.getPlantId();
 			Long mdlIdQ3 = modelQ3.getId();
-			String mdlType = "";
+			String mdlTypeQ3 = "";
 
 			if (modelQ3.getModelTypeId() == 1) {
-				mdlType = "KC";
+				mdlTypeQ3 = "KC";
 			}
 
 			if (modelQ3.getModelTypeId() == 2) {
-				mdlType = "KA";
+				mdlTypeQ3 = "KA";
 			}
 
 			// QUERY4
@@ -232,7 +244,7 @@ public class GenackafeService {
 			Optional<AfePlantEntity> afePlant = afePlantRepository.findById(plantIdQ3);
 			if (!afePlant.isPresent()) {
 
-				genackMessagesHandler.createAndLogMessagePlantNoExist(divisionIdQ3, fixedOrderId,
+				genackMessagesHandler.createAndLogMessagePlantNoExist(plantIdQ3, fixedOrderId,
 						"SELECT * FROM AFE_DIVISION WHERE ID");
 				continue;
 			}
@@ -245,7 +257,7 @@ public class GenackafeService {
 			if (colors.isEmpty()) {
 
 				genackMessagesHandler.createAndLogMessageColorNoExists(colorIdQ2, fixedOrderId,
-						"SELEC * FROM AFE_COLOR WHERE ID");
+						"SELECT o FROM AfeColorEntity o WHERE o.id = :id ");
 
 				continue;
 			}
@@ -261,7 +273,7 @@ public class GenackafeService {
 
 			if (actions.isEmpty()) {
 				genackMessagesHandler.createAndLogMessageActionNoExists(actionIdQ1, fixedOrderId,
-						"SELECT * FROM AFE_ACTION_EV WHERE ID");
+						"SELECT o FROM AfeActionEvEntity o WHERE o.id = :id ");
 				continue;
 			}
 
@@ -276,7 +288,7 @@ public class GenackafeService {
 			if (ordersHistories.isEmpty()) {
 
 				genackMessagesHandler.createAndLogMessageOrdersHistoryNoExists(fixedOrderId,
-						"SELECT * FROM AFE_ORDER_ACTION_HISTORY WHERE FIXED_ORDER_ID ORDER BY DESC");
+						"SELECT o FROM AfeOrdersActionHistoryEntity o WHERE o.fixedOrderId = :fixedOrderId order by o.fixedOrderId desc ");
 				continue;
 			}
 
@@ -286,9 +298,9 @@ public class GenackafeService {
 			List<AfeAckMsgEntity> ackMesagges = afeAckMsgRepository.findAllByFixedOrderId(idQ8);
 
 			if (ackMesagges.isEmpty()) {
-				log.debug("No existen ack_messages for orders_histories {} ", idQ8);
+				log.debug("No existen ack_messages for fixed_order_id: {} ", idQ8);
 				genackMessagesHandler.createAndLogMessageNoAckMessageExists(idQ8, fixedOrderId,
-						"SELECT * FROM AFE_ACK_MSG WHERE ID ");
+						"SELECT o FROM AfeAckMsgEntity o WHERE o.afeOrderActionHistoryId = :afeOrderActionHistoryId ");
 				continue;
 			}
 
@@ -305,7 +317,7 @@ public class GenackafeService {
 				fileLine.append(completeSpaces("" + formatter.format(ordDueDteQ1), "GM-ORD-DUE-DT"));
 
 				fileLine.append(completeSpaces("" + mdlIdQ3, "MDL-ID"));
-				fileLine.append(completeSpaces(mdlType, "MDL-TYP-CD"));
+				fileLine.append(completeSpaces(mdlTypeQ3, "MDL-TYP-CD"));
 				fileLine.append("   "); // "MDL-OPT-PKG-CD"
 
 				fileLine.append(completeSpaces(colorCodeQ6, "MDL-MFG-COLOR-ID"));
@@ -313,11 +325,12 @@ public class GenackafeService {
 				fileLine.append(completeSpaces(colorIntCodeQ6, "INT-COLOR-CD"));
 				fileLine.append(completeSpaces(actionQ7, "GM-ORD-ACK-ACTION"));
 				fileLine.append(completeSpaces(orderNumberQ1, "GM-ORD-ACK-VEH-ORD-NO"));
+				fileLine.append(completeSpaces(exterConfigIdQ1, "GM-ORD-ACK-EXTERN-CONFIG-ID"));
+				
 				fileLine.append(completeSpaces(ackStatusQ9, "GM-ORD-ACK-REQST-STATUS"));
 				fileLine.append(completeSpaces(ackStatusMsgQ9, "GM-ORD-ACK-MSG"));
 
-				String timeStamp = GenackafeUtils.formatDateTimeStamp(timeStpQ9);
-				fileLine.append(completeSpaces(timeStamp, "GM-ORD-ACK-VO-LAST-CHG-TMSTP"));
+				fileLine.append(completeSpaces(GenackafeUtils.formatDateTimeStamp(timeStpQ9), "GM-ORD-ACK-VO-LAST-CHG-TMSTP"));
 				fileLine.append(completeSpaces("" + requestIdQ1, "GM-ORD-ACK-REQST-ID"));
 				fileLine.append("                                                               ");
 
@@ -331,12 +344,11 @@ public class GenackafeService {
 					addLineToFile(fileLine.toString());
 
 				} catch (IOException e) {
+					e.printStackTrace();
 					log.error("Line not added due to: {} ", e.getLocalizedMessage());
 					continue;
 				}
 
-				// GenackafeUtils.checkFileIfWriteFile(folderSource, fileName,
-				// fileLine.toString());
 			} catch (GenackafeException e) {
 				log.info("El archivo {} NO fue creado correctamente en la ubicación: {}", fileName, folderSource);
 				event = new EventVO(serviceName, GenackafeConstants.ZERO_STATUS,
@@ -410,6 +422,14 @@ public class GenackafeService {
 
 	private void addLineToFile(String line) throws IOException {
 
+		Path folder = Paths.get(folderSource);
+		
+		if(!Files.exists(folder)) {
+			
+			Files.createDirectories(folder);
+			
+		}
+		
 		String newLine = line + "\n";
 		final Path path = Paths.get(this.output);
 
